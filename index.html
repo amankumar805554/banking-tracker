@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    
+    <meta name="theme-color" content="#F8F9FE" id="theme-color-meta">
+    
+    <title>Daily Focus</title>
+    <link rel="icon" href="./logo/Sasuke.jpg" type="image/jpeg">
+    
+    <link rel="stylesheet" href="style.css?v=20"> 
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+</head>
+<body>
+
+    <div id="menu-overlay" onclick="toggleMobileMenu()"></div>
+
+    <div id="app-container">
+        
+        <header>
+            <div class="brand">
+                <button id="mobile-menu-btn" onclick="toggleMobileMenu()">
+                    <ion-icon name="menu-outline"></ion-icon>
+                </button>
+                
+                <div class="logo">⚡</div>
+                <div class="brand-text">Daily<b>Focus</b></div>
+            </div>
+            
+            <div class="header-controls">
+                <button id="theme-btn" onclick="toggleTheme()">🌙</button>
+                <div class="user-chip" onclick="handleAuth()">
+                    <div class="avatar-container">
+                        <ion-icon name="person-circle" id="default-icon"></ion-icon>
+                        <img id="google-photo" src="" alt="Profile" style="display: none;">
+                    </div>
+                    <span id="auth-text">Login</span>
+                </div>
+            </div>
+        </header>
+
+        <div class="tabs-wrapper" id="main-nav">
+            <div class="tabs">
+                <button onclick="showTab('routine')" class="active-tab"><ion-icon name="home"></ion-icon> Home</button>
+                <button onclick="showTab('bingo')"><ion-icon name="list"></ion-icon> Mission</button>
+                <button onclick="showTab('timer')"><ion-icon name="hourglass"></ion-icon> Timer</button>
+                <button onclick="showTab('analytics')"><ion-icon name="bar-chart"></ion-icon> Stats</button>
+                <button onclick="showTab('about')"><ion-icon name="person"></ion-icon> About</button>
+                <button onclick="showTab('contact')"><ion-icon name="paper-plane"></ion-icon> Contact</button>
+            </div>
+        </div>
+
+        <div id="routine-tab" class="content-section">
+            <div class="desktop-layout-wrapper">
+                <div class="left-column">
+                    <div class="card chart-card-sticky">
+                        <h4>Today's Chakra Flow</h4>
+                        <div class="pie-container">
+                            <canvas id="todayPieChart"></canvas>
+                        </div>
+                        <div id="today-summary" class="summary-text">
+                            <p style="opacity: 0.6; font-size: 0.9rem;">Start training to see analysis.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="right-column">
+                    <div class="section-top">
+                        <h3>Mission Schedule</h3>
+                        <div class="edit-controls">
+                            <button id="edit-btn" class="icon-btn" onclick="toggleEditMode()" title="Edit Schedule">
+                                <ion-icon name="create-outline"></ion-icon>
+                            </button>
+                            <button id="done-btn" class="icon-btn success-btn" onclick="saveCustomRoutine()" style="display: none;" title="Save Changes">
+                                <ion-icon name="checkmark-circle"></ion-icon>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="routine-list" class="grid-container"></div>
+                    
+                    <button id="add-slot-fab" class="fab-btn" onclick="addNewSlot()" style="display: none;" title="Add Slot">
+                        <ion-icon name="add"></ion-icon>
+                    </button>
+
+                    <div class="card static-save-panel" style="display: none;">
+                        <div class="bar-info">
+                            <span class="label">Total Focus Time</span>
+                            <span class="value"><span id="today-hours-static">0</span>h</span>
+                        </div>
+                        <button class="btn-save-static" onclick="saveDay()">Save Progress</button>
+                    </div>
+                </div>
+            </div>
+            <div class="floating-bar">
+                <div class="bar-info">
+                    <span class="label">Focus Time</span>
+                    <span class="value"><span id="today-hours">0</span>h</span>
+                </div>
+                <button id="save-btn" onclick="saveDay()">Save</button>
+            </div>
+        </div>
+
+        <div id="bingo-tab" class="content-section" style="display:none;">
+            <div class="card bingo-card">
+                <div class="bingo-header">
+                    <h3><ion-icon name="scroll"></ion-icon> Mission Book</h3>
+                    <div class="rank-selector">
+                        <button class="rank-btn active-rank" onclick="filterMissions('daily')" id="rank-daily">D-Rank (Day)</button>
+                        <button class="rank-btn" onclick="filterMissions('weekly')" id="rank-weekly">B-Rank (Week)</button>
+                        <button class="rank-btn" onclick="filterMissions('monthly')" id="rank-monthly">S-Rank (Month)</button>
+                    </div>
+                </div>
+
+                <div class="mission-input-area">
+                    <input type="text" id="new-mission-input" placeholder="Enter Mission Objective...">
+                    <button class="add-mission-btn" onclick="addMission()">+</button>
+                </div>
+
+                <div id="mission-list" class="mission-list"></div>
+            </div>
+        </div>
+
+        <div id="timer-tab" class="content-section" style="display:none;">
+            <div class="card timer-box">
+                <div class="timer-display" id="timer-circle">
+                    <h1 id="timer-text">00:00</h1>
+                    <p id="timer-status">Ready to Focus</p>
+                </div>
+                <div class="timer-inputs">
+                    <input type="number" id="input-min" placeholder="Min" value="25" min="1" max="180">
+                    <input type="number" id="input-sec" placeholder="Sec" value="00" min="0" max="59">
+                </div>
+                <div class="timer-controls">
+                    <button class="btn-primary" onclick="startTimer()" id="start-btn">Start</button>
+                    <button class="btn-secondary" onclick="lapTimer()">Lap</button>
+                    <button class="btn-secondary" onclick="resetTimer()">Reset</button>
+                </div>
+                <div id="lap-list" class="lap-container"></div>
+            </div>
+        </div>
+
+        <div id="analytics-tab" class="content-section" style="display:none;">
+            <div class="card chart-card">
+                <div class="chart-header">
+                    <h3>Training History</h3>
+                    <div class="stats-filters">
+                        <button onclick="loadStats(7)" class="filter-btn active-filter" id="btn-7">7D</button>
+                        <button onclick="loadStats(30)" class="filter-btn" id="btn-30">30D</button>
+                        <button onclick="loadStats(90)" class="filter-btn" id="btn-90">3M</button>
+                    </div>
+                </div>
+                <div class="chart-wrapper"><canvas id="studyChart"></canvas></div>
+            </div>
+        </div>
+
+        <div id="about-tab" class="content-section" style="display:none;">
+            <div class="card profile-card">
+                <div class="profile-header-img">
+                    <img src="./logo/Sasuke.jpg" alt="Sasuke" class="main-profile-pic">
+                </div>
+                <div class="profile-info">
+                    <h2>Sasuke Uchiha</h2>
+                    <span class="ninja-rank" id="dynamic-rank">Shadow Hokage | Developer</span>
+                    <div class="bio-section">
+                        <h4>⚡ My Ninja Way</h4>
+                        <p>I am a full-stack developer and banking aspirant. I build systems that are fast, efficient, and precise.</p>
+                    </div>
+                    <div class="tech-stack-section">
+                        <h4>🖥️ Environment</h4>
+                        <div class="os-badges">
+                            <span class="badge win">Windows 11</span>
+                            <span class="badge ubuntu">Ubuntu 20.04</span>
+                        </div>
+                        <div class="specs-box">
+                            <div class="specs-header"><h5 class="specs-model">Acer Predator Helios 300</h5><span class="specs-icon">💻</span></div>
+                            <div class="specs-grid">
+                                <div class="spec-item"><span class="spec-label">Processor</span><span class="spec-value">Intel Core™ i7</span></div>
+                                <div class="spec-item"><span class="spec-label">Graphics</span><span class="spec-value">GTX 1650Ti</span></div>
+                                <div class="spec-item"><span class="spec-label">RAM</span><span class="spec-value">16GB DDR4</span></div>
+                                <div class="spec-item"><span class="spec-label">Storage</span><span class="spec-value">250GB SSD + 1TB HDD</span></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="hobby-tags">
+                        <span>Coding</span><span>Banking Prep</span><span>Anime</span><span>Gaming</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="contact-tab" class="content-section" style="display:none;">
+            <div class="card contact-card">
+                <div class="quote-box">
+                    <p>"I have long since closed my eyes... My only goal is in the darkness."</p>
+                    <span class="quote-author">- Sasuke Uchiha</span>
+                </div>
+                <div class="contact-links">
+                    <a href="mailto:amankumar805554@gmail.com" class="contact-item"><div class="icon-box mail"><ion-icon name="mail"></ion-icon></div><div class="contact-text"><span>Gmail</span><small>Connect</small></div></a>
+                    <a href="https://t.me/inocent_aman" target="_blank" class="contact-item"><div class="icon-box telegram"><ion-icon name="paper-plane"></ion-icon></div><div class="contact-text"><span>Telegram</span><small>Chat</small></div></a>
+                    <a href="https://linkedin.com/in/inosent_aman" target="_blank" class="contact-item"><div class="icon-box linkedin"><ion-icon name="logo-linkedin"></ion-icon></div><div class="contact-text"><span>LinkedIn</span><small>Professional</small></div></a>
+                    <a href="https://instagram.com/inosent_aman" target="_blank" class="contact-item"><div class="icon-box instagram"><ion-icon name="logo-instagram"></ion-icon></div><div class="contact-text"><span>Instagram</span><small>Social</small></div></a>
+                    <a href="https://github.com/amankumar805554" target="_blank" class="contact-item"><div class="icon-box github"><ion-icon name="logo-github"></ion-icon></div><div class="contact-text"><span>GitHub</span><small>Code</small></div></a>
+                    <a href="https://discord.gg/inosent_aman" target="_blank" class="contact-item"><div class="icon-box discord"><ion-icon name="logo-discord"></ion-icon></div><div class="contact-text"><span>Discord</span><small>Community</small></div></a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <script type="module" src="app.js?v=20"></script>
+</body>
+</html>
