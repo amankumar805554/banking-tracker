@@ -179,6 +179,23 @@ window.deleteMission = (index) => {
     }
 };
 
+// --- SOUND JUTSU ---
+function playTimerSound() {
+    const body = document.body;
+    let soundFile = './audio/chidori.mp3'; // Default Light Mode
+
+    // Check which Mode is active
+    if (body.classList.contains('sharingan')) {
+        soundFile = './audio/rinne.mp3';     // RinneSharingan Mode
+    } else if (body.classList.contains('dark')) {
+        soundFile = './audio/sharingan.mp3'; // Black/Dark Mode
+    }
+
+    // Activate the sound
+    const audio = new Audio(soundFile);
+    audio.play().catch(error => console.log("Audio permission needed:", error));
+}
+
 // --- 3. TIMER LOGIC ---
 window.startTimer = () => {
     const btn = document.getElementById('start-btn');
@@ -218,6 +235,7 @@ window.startTimer = () => {
             timerInterval = null;
             timeLeft = null;
             timerEndTime = null;
+            playTimerSound();
             btn.innerText = "Start";
             status.innerText = "Mission Complete";
             circle.classList.remove('running');
