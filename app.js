@@ -324,8 +324,6 @@ window.onload = () => {
     loadTodayData();
     setTimeout(updateUI, 500);
     
-    // Circular Favicon Logic
-    setCircularFavicon();
 
     const missionInput = document.getElementById('new-mission-input');
     if(missionInput) {
@@ -337,25 +335,6 @@ window.onload = () => {
     }
 };
 
-const setCircularFavicon = () => {
-    const link = document.querySelector("link[rel~='icon']");
-    if (!link) return;
-    const img = new Image();
-    img.crossOrigin = "Anonymous";
-    img.src = link.href;
-    img.onload = () => {
-        const canvas = document.createElement('canvas');
-        canvas.width = img.width;
-        canvas.height = img.height;
-        const ctx = canvas.getContext('2d');
-        ctx.beginPath();
-        ctx.arc(canvas.width / 2, canvas.height / 2, canvas.width / 2, 0, 2 * Math.PI);
-        ctx.closePath();
-        ctx.clip();
-        ctx.drawImage(img, 0, 0);
-        link.href = canvas.toDataURL();
-    };
-};
 
 // --- CORE FUNCTIONS ---
 const defaultRoutine = [
