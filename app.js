@@ -42,7 +42,7 @@ window.showTab = (t) => {
     document.getElementById(t+'-tab').style.display='block';
     
     document.querySelectorAll('.tabs button').forEach(b => b.classList.remove('active-tab'));
-    const tabMap = { 'routine': 'Home', 'bingo': 'Mission', 'timer': 'Timer', 'analytics': 'Stats', 'about': 'About', 'contact': 'Contact' };
+    const tabMap = { 'routine': 'Home', 'bingo': 'Mission', 'timer': 'Timer', 'training': 'Dojo', 'analytics': 'Stats', 'about': 'About', 'contact': 'Contact' };
     const targetLabel = tabMap[t];
     const btns = document.querySelectorAll('.tabs button');
     for(let b of btns) {
@@ -57,6 +57,7 @@ window.showTab = (t) => {
     if(t === 'analytics') window.loadStats(7);
     if(t === 'routine') setTimeout(updateUI, 100);
     if(t === 'bingo') renderMissions(); 
+    if(t === 'training') renderMocks();
 };
 
 window.toggleMobileMenu = () => {
@@ -178,6 +179,262 @@ window.deleteMission = (index) => {
         renderMissions();
     }
 };
+
+// --- DAILY WISDOM LOGIC ---
+const bankingTerms = [
+    { w: "Repo Rate", d: "Rate at which RBI lends money to commercial banks." },
+    { w: "Reverse Repo", d: "Rate at which RBI borrows money from banks." },
+    { w: "SLR (Statutory Liquidity Ratio)", d: "Min % of deposits banks must hold in liquid assets (gold, cash)." },
+    { w: "CRR (Cash Reserve Ratio)", d: "% of total deposits banks must keep with RBI as cash." },
+    { w: "NPA (Non-Performing Asset)", d: "A loan where interest/principal is overdue for 90 days." },
+    { w: "Fiscal Deficit", d: "Difference between total revenue and total expenditure of the govt." },
+    { w: "Inflation", d: "Rate at which prices of goods and services rise." },
+    { w: "Demonetization", d: "Act of stripping a currency unit of its status as legal tender." },
+    { w: "KYC (Know Your Customer)", d: "Process of verifying the identity of clients." },
+    { w: "NEFT", d: "National Electronic Funds Transfer - processed in batches." },
+    { w: "RTGS", d: "Real Time Gross Settlement - instant large value transfers." },
+    { w: "Amortization", d: "Paying off debt with a fixed repayment schedule." },
+    { w: "Collateral", d: "Asset offered to secure a loan." },
+    { w: "Liquidity", d: "How easily an asset can be converted into cash." }
+];
+
+function loadDailyIntel() {
+    const title = document.getElementById('daily-word');
+    const desc = document.getElementById('daily-def');
+    if(!title) return;
+
+    // Use the current date to pick a unique index
+    const today = new Date();
+    const start = new Date(today.getFullYear(), 0, 0);
+    const diff = today - start;
+    const oneDay = 1000 * 60 * 60 * 24;
+    const dayOfYear = Math.floor(diff / oneDay);
+
+    // The Magic: Ensures word changes every 24h automatically
+    const index = dayOfYear % bankingTerms.length;
+    
+    title.innerText = bankingTerms[index].w;
+    desc.innerText = bankingTerms[index].d;
+}
+
+// --- TRAINING LOGIC ---
+
+// SPEED JUTSU (Math Game)
+let gameActive = false;
+let currentAnswer = 0;
+let chakraScore = 0;
+let isMuted = true; // <--- FIXED: Muted by default
+let questionTimer = null;
+let timeLeftBar = 100;
+
+window.toggleMute = () => {
+    isMuted = !isMuted;
+    const btn = document.getElementById('mute-btn');
+    if(btn) {
+        btn.innerHTML = isMuted 
+            ? '<ion-icon name="volume-mute"></ion-icon>' 
+            : '<ion-icon name="volume-high"></ion-icon>';
+    }
+};
+
+window.startGame = () => {
+    gameActive = true;
+    chakraScore = 0;
+    document.getElementById('score-display').innerText = "CHAKRA: 0";
+    const bar = document.getElementById('chakra-timer-bar');
+    if(bar) { bar.style.width = '100%'; bar.style.background = '#10B981'; }
+    
+    // Toggle Buttons
+    document.getElementById('start-game-btn').style.display = 'none';
+    document.getElementById('stop-game-btn').style.display = 'inline-block';
+    
+    const input = document.getElementById('math-answer');
+    input.disabled = false;
+    input.value = '';
+    input.focus();
+    nextQuestion();
+};
+
+window.stopGame = () => {
+    gameActive = false;
+    clearInterval(questionTimer);
+    
+    // Reset UI
+    document.getElementById('math-problem').innerText = "TEST STOPPED";
+    document.getElementById('score-display').innerText = `FINAL SCORE: ${chakraScore}`;
+    
+    // Toggle Buttons Back
+    document.getElementById('start-game-btn').style.display = 'inline-block';
+    document.getElementById('stop-game-btn').style.display = 'none';
+    
+    // Disable Input
+    const input = document.getElementById('math-answer');
+    input.disabled = true;
+    input.value = '';
+    
+    // Reset Bar
+    const bar = document.getElementById('chakra-timer-bar');
+    if(bar) { bar.style.width = '0%'; bar.style.background = '#EF4444'; }
+};
+
+function startQuestionTimer() {
+    clearInterval(questionTimer);
+    timeLeftBar = 100;
+    const bar = document.getElementById('chakra-timer-bar');
+    
+    questionTimer = setInterval(() => {
+        timeLeftBar -= 1;
+        if(bar) {
+            bar.style.width = timeLeftBar + "%";
+            if(timeLeftBar > 50) bar.style.background = "#10B981";
+            else if(timeLeftBar > 20) bar.style.background = "#F59E0B";
+            else bar.style.background = "#EF4444";
+        }
+
+        if(timeLeftBar <= 0) {
+            handleTimeUp();
+        }
+    }, 100);
+}
+
+
+function handleTimeUp() {
+    clearInterval(questionTimer);
+    checkAnswer(true);
+}
+
+function nextQuestion() {
+    if(!gameActive) return;
+    startQuestionTimer();
+    
+    const ops = ['+', '-', 'x'];
+    const op = ops[Math.floor(Math.random() * ops.length)];
+    let a, b;
+    
+    if(op === 'x') { a = Math.floor(Math.random()*15)+2; b = Math.floor(Math.random()*9)+2; } 
+    else { a = Math.floor(Math.random()*50)+10; b = Math.floor(Math.random()*40)+5; }
+
+    if(op === '+') currentAnswer = a + b;
+    if(op === '-') { if(a < b) [a,b] = [b,a]; currentAnswer = a - b; } 
+    if(op === 'x') currentAnswer = a * b;
+
+    document.getElementById('math-problem').innerText = `${a} ${op} ${b}`;
+    document.getElementById('math-answer').value = '';
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const mathInput = document.getElementById('math-answer');
+    if(mathInput) {
+        mathInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') checkAnswer(false);
+        });
+    }
+});
+
+function checkAnswer(isTimeout = false) {
+    clearInterval(questionTimer);
+    const input = document.getElementById('math-answer');
+    const val = parseInt(input.value);
+    const card = document.querySelector('.game-card');
+
+    let correct = false;
+    if (!isTimeout && val === currentAnswer) correct = true;
+
+    if(correct) {
+        chakraScore += 10;
+        if(!isMuted) new Audio('./audio/rinne.mp3').play().catch(()=>{});
+        card.classList.add('correct-hit');
+        setTimeout(() => card.classList.remove('correct-hit'), 500);
+    } else {
+        chakraScore -= 5;
+        if(!isMuted) new Audio('./audio/chidori.mp3').play().catch(()=>{});
+        card.classList.add('wrong-hit');
+        setTimeout(() => card.classList.remove('wrong-hit'), 500);
+    }
+    
+    document.getElementById('score-display').innerText = `CHAKRA: ${chakraScore}`;
+    setTimeout(nextQuestion, 500);
+}
+
+// B. FORBIDDEN SCROLL (MODAL LOGIC)
+window.openScrollModal = () => {
+    document.getElementById('scroll-modal').style.display = 'flex';
+    switchScrollTab('squares');
+};
+window.closeScrollModal = () => {
+    document.getElementById('scroll-modal').style.display = 'none';
+};
+
+// DATA FOR ASPIRANTS
+const mixedFractions = {
+    3: "33 1/3%", 6: "16 2/3%", 7: "14 2/7%", 8: "12 1/2%", 
+    9: "11 1/9%", 11: "9 1/11%", 12: "8 1/3%", 13: "7 9/13%",
+    14: "7 1/7%", 15: "6 2/3%", 16: "6 1/4%"
+};
+
+window.switchScrollTab = (type) => {
+    const container = document.getElementById('scroll-data-container');
+    document.querySelectorAll('.scroll-tab').forEach(b => b.classList.remove('active'));
+    document.getElementById(`tab-${type}`).classList.add('active');
+    
+    container.innerHTML = '';
+    
+    if (type === 'squares') {
+        // Squares 1-50
+        for(let i=1; i<=50; i++) {
+            container.innerHTML += `<div class="data-item">${i}² <span>${i*i}</span></div>`;
+        }
+    } 
+    else if (type === 'cubes') {
+        // NEW: Cubes 1-30
+        for(let i=1; i<=30; i++) {
+            container.innerHTML += `<div class="data-item">${i}³ <span>${i*i*i}</span></div>`;
+        }
+    }
+    else {
+        // Fractions 1-20 (Decimal + Mixed)
+        for(let i=1; i<=20; i++) {
+            const decimal = (100/i).toFixed(2).replace('.00','');
+            const mixed = mixedFractions[i] || ""; // Get mixed if exists
+            
+            // Highlight important banking fractions
+            let style = '';
+            if([3,6,7,8,9,11,12,14,16].includes(i)) style = 'color: var(--primary); border: 1px solid var(--primary);';
+
+            let displayHtml = `${decimal}%`;
+            if(mixed) displayHtml += `<br><small style="opacity:0.8">${mixed}</small>`;
+
+            container.innerHTML += `<div class="data-item" style="${style}">1/${i} <span>${displayHtml}</span></div>`;
+        }
+    }
+};
+
+// C. BATTLE HISTORY (Same as before)
+window.addMockScore = () => {
+    const name = document.getElementById('mock-name').value;
+    const score = document.getElementById('mock-score').value;
+    if(!name || !score) return;
+    
+    let mocks = JSON.parse(localStorage.getItem('battleHistory')) || [];
+    mocks.unshift({ name, score, date: new Date().toLocaleDateString() });
+    localStorage.setItem('battleHistory', JSON.stringify(mocks));
+    
+    document.getElementById('mock-name').value = '';
+    document.getElementById('mock-score').value = '';
+    renderMocks();
+};
+
+function renderMocks() {
+    const list = document.getElementById('mock-list');
+    if(!list) return;
+    const mocks = JSON.parse(localStorage.getItem('battleHistory')) || [];
+    list.innerHTML = mocks.map(m => `
+        <div class="mock-item">
+            <span>${m.name} <small style="opacity:0.6">(${m.date})</small></span>
+            <span class="mock-score">${m.score}</span>
+        </div>
+    `).join('');
+}
 
 // --- SOUND JUTSU ---
 function playTimerSound() {
@@ -322,8 +579,9 @@ window.onload = () => {
     showTab(lastTab); 
     renderMissions();
     loadTodayData();
+    loadDailyIntel(); //this
     setTimeout(updateUI, 500);
-    
+
 
     const missionInput = document.getElementById('new-mission-input');
     if(missionInput) {

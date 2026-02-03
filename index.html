@@ -1,37 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    
+
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+
     <meta name="theme-color" content="#F8F9FE" id="theme-color-meta">
-    
+
     <title>Daily Focus</title>
     <link rel="icon" href="./logo/favicon.ico" type="image/x-icon">
-    
-    <link rel="stylesheet" href="style.css?v=20"> 
-    
+
+    <link rel="stylesheet" href="style.css?v=20">
+
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
 </head>
+
 <body>
 
     <div id="menu-overlay" onclick="toggleMobileMenu()"></div>
 
     <div id="app-container">
-        
+
         <header>
             <div class="brand">
                 <button id="mobile-menu-btn" onclick="toggleMobileMenu()">
                     <ion-icon name="menu-outline"></ion-icon>
                 </button>
-                
-                <div class="logo">⚡</div>
-                <div class="brand-text">Daily<b>Focus</b></div>
+
+                <div class="logo" onclick="location.reload()" style="cursor: pointer;" title="Refresh">⚡</div>
+                <div class="brand-text" onclick="location.reload()" style="cursor: pointer;" title="Refresh">
+                    Daily<b>Focus</b></div>
             </div>
-            
+
             <div class="header-controls">
                 <button id="theme-btn" onclick="toggleTheme()">🌙</button>
                 <div class="user-chip" onclick="handleAuth()">
@@ -49,6 +53,7 @@
                 <button onclick="showTab('routine')" class="active-tab"><ion-icon name="home"></ion-icon> Home</button>
                 <button onclick="showTab('bingo')"><ion-icon name="list"></ion-icon> Mission</button>
                 <button onclick="showTab('timer')"><ion-icon name="hourglass"></ion-icon> Timer</button>
+                <button onclick="showTab('training')"><ion-icon name="flash"></ion-icon> Training</button>
                 <button onclick="showTab('analytics')"><ion-icon name="bar-chart"></ion-icon> Stats</button>
                 <button onclick="showTab('about')"><ion-icon name="person"></ion-icon> About</button>
                 <button onclick="showTab('contact')"><ion-icon name="paper-plane"></ion-icon> Contact</button>
@@ -67,6 +72,30 @@
                             <p style="opacity: 0.6; font-size: 0.9rem;">Start training to see analysis.</p>
                         </div>
                     </div>
+                    <!-- from here -->
+                    <div class="card intel-card" style="margin-top: 20px;">
+                        <h4><span class="icon">📜</span> Intel Report</h4>
+                        <div class="daily-term-box">
+                            <small>TERM OF THE DAY</small>
+                            <h3 id="daily-word">Loading...</h3>
+                            <p id="daily-def">Fetching data...</p>
+                        </div>
+                        <h4 style="margin-top:20px; font-size: 0.9rem;">Intelligence Sources</h4>
+                        <div class="intel-grid">
+                            <a href="https://www.affairscloud.com/current-affairs/" target="_blank" class="intel-btn">
+                                <span>AffairsCloud</span> <ion-icon name="open-outline"></ion-icon>
+                            </a>
+                            <a href="https://currentaffairs.adda247.com/" target="_blank" class="intel-btn">
+                                <span>Adda247</span> <ion-icon name="open-outline"></ion-icon>
+                            </a>
+                            <a href="https://www.practicemock.com/current-affairs" target="_blank" class="intel-btn">
+                                <span>PracticeMock</span> <ion-icon name="open-outline"></ion-icon>
+                            </a>
+                            <a href="https://www.thehindu.com/opinion/editorial/" target="_blank" class="intel-btn">
+                                <span>Editorial</span> <ion-icon name="newspaper-outline"></ion-icon>
+                            </a>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="right-column">
@@ -76,15 +105,17 @@
                             <button id="edit-btn" class="icon-btn" onclick="toggleEditMode()" title="Edit Schedule">
                                 <ion-icon name="create-outline"></ion-icon>
                             </button>
-                            <button id="done-btn" class="icon-btn success-btn" onclick="saveCustomRoutine()" style="display: none;" title="Save Changes">
+                            <button id="done-btn" class="icon-btn success-btn" onclick="saveCustomRoutine()"
+                                style="display: none;" title="Save Changes">
                                 <ion-icon name="checkmark-circle"></ion-icon>
                             </button>
                         </div>
                     </div>
 
                     <div id="routine-list" class="grid-container"></div>
-                    
-                    <button id="add-slot-fab" class="fab-btn" onclick="addNewSlot()" style="display: none;" title="Add Slot">
+
+                    <button id="add-slot-fab" class="fab-btn" onclick="addNewSlot()" style="display: none;"
+                        title="Add Slot">
                         <ion-icon name="add"></ion-icon>
                     </button>
 
@@ -111,9 +142,12 @@
                 <div class="bingo-header">
                     <h3><ion-icon name="scroll"></ion-icon> Mission Book</h3>
                     <div class="rank-selector">
-                        <button class="rank-btn active-rank" onclick="filterMissions('daily')" id="rank-daily">D-Rank (Day)</button>
-                        <button class="rank-btn" onclick="filterMissions('weekly')" id="rank-weekly">B-Rank (Week)</button>
-                        <button class="rank-btn" onclick="filterMissions('monthly')" id="rank-monthly">S-Rank (Month)</button>
+                        <button class="rank-btn active-rank" onclick="filterMissions('daily')" id="rank-daily">D-Rank
+                            (Day)</button>
+                        <button class="rank-btn" onclick="filterMissions('weekly')" id="rank-weekly">B-Rank
+                            (Week)</button>
+                        <button class="rank-btn" onclick="filterMissions('monthly')" id="rank-monthly">S-Rank
+                            (Month)</button>
                     </div>
                 </div>
 
@@ -145,6 +179,79 @@
             </div>
         </div>
 
+        <div id="training-tab" class="content-section" style="display:none;">
+
+            <div class="card game-card">
+                <div class="game-header">
+                    <button class="icon-btn" onclick="toggleMute()" id="mute-btn" title="Toggle Sound">
+                        <ion-icon name="volume-mute"></ion-icon>
+                    </button>
+                    <div class="score-box">
+                        <span id="score-display">CHAKRA: 0</span>
+                    </div>
+                </div>
+
+                <div class="game-arena">
+                    <h2 id="math-problem">START TEST</h2>
+                    <div class="input-wrapper">
+                        <input type="number" id="math-answer" placeholder="?" disabled autocomplete="off">
+                    </div>
+                </div>
+
+                <div class="chakra-bar-container">
+                    <div id="chakra-timer-bar" class="chakra-bar"></div>
+                </div>
+
+                <div class="game-controls">
+                    <button class="btn-primary" id="start-game-btn" onclick="startGame()">START TEST</button>
+                    <button class="btn-primary" id="stop-game-btn" onclick="stopGame()"
+                        style="display: none; background-color: #EF4444;">STOP TEST</button>
+                </div>
+            </div>
+
+            <div class="card scroll-card" style="margin-top: 20px;" onclick="openScrollModal()">
+                <div class="scroll-content">
+                    <div class="scroll-icon-box">📜</div>
+                    <div class="scroll-text">
+                        <h4>Forbidden Scroll</h4>
+                        <small>Tap to view Squares (1-50) & Fractions</small>
+                    </div>
+                    <ion-icon name="chevron-forward"></ion-icon>
+                </div>
+            </div>
+
+            <div class="card battle-card" style="margin-top: 20px;">
+                <h4>📊 Battle History</h4>
+                <div class="add-mock-area">
+                    <input type="text" id="mock-name" placeholder="Exam Name">
+                    <input type="number" id="mock-score" placeholder="Marks">
+                    <button onclick="addMockScore()">+</button>
+                </div>
+                <div id="mock-list" class="mock-list"></div>
+            </div>
+        </div>
+
+        <div id="scroll-modal" class="modal-overlay">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Secret Intel</h3>
+                    <button onclick="closeScrollModal()" class="close-modal-btn"><ion-icon
+                            name="close"></ion-icon></button>
+                </div>
+                <div class="modal-body">
+                    <div class="tabs-scroll">
+                        <button onclick="switchScrollTab('squares')" class="scroll-tab active"
+                            id="tab-squares">Squares</button>
+                        <button onclick="switchScrollTab('cubes')" class="scroll-tab" id="tab-cubes">Cubes</button>
+                        <button onclick="switchScrollTab('fractions')" class="scroll-tab"
+                            id="tab-fractions">Fractions</button>
+                    </div>
+                    <div id="scroll-data-container" class="data-grid">
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div id="analytics-tab" class="content-section" style="display:none;">
             <div class="card chart-card">
                 <div class="chart-header">
@@ -169,7 +276,8 @@
                     <span class="ninja-rank" id="dynamic-rank">Shadow Hokage | Developer</span>
                     <div class="bio-section">
                         <h4>⚡ My Ninja Way</h4>
-                        <p>I am a full-stack developer and banking aspirant. I build systems that are fast, efficient, and precise.</p>
+                        <p>A silent creative and Banking Aspirant. I speak through my code and art. Whether sketching on
+                            my tab or solving bugs, I maintain deep focus in the shadows.</p>
                     </div>
                     <div class="tech-stack-section">
                         <h4>🖥️ Environment</h4>
@@ -178,17 +286,24 @@
                             <span class="badge ubuntu">Ubuntu 20.04</span>
                         </div>
                         <div class="specs-box">
-                            <div class="specs-header"><h5 class="specs-model">Acer Predator Helios 300</h5><span class="specs-icon">💻</span></div>
+                            <div class="specs-header">
+                                <h5 class="specs-model">Acer Predator Helios 300</h5><span class="specs-icon">💻</span>
+                            </div>
                             <div class="specs-grid">
-                                <div class="spec-item"><span class="spec-label">Processor</span><span class="spec-value">i7-10750H</span></div>
-                                <div class="spec-item"><span class="spec-label">Graphics</span><span class="spec-value">GTX 1650Ti</span></div>
-                                <div class="spec-item"><span class="spec-label">RAM</span><span class="spec-value">16GB DDR4</span></div>
-                                <div class="spec-item"><span class="spec-label">Storage</span><span class="spec-value">250GB SSD + 1TB HDD</span></div>
+                                <div class="spec-item"><span class="spec-label">Processor</span><span
+                                        class="spec-value">i7-10750H</span></div>
+                                <div class="spec-item"><span class="spec-label">Graphics</span><span
+                                        class="spec-value">GTX 1650Ti</span></div>
+                                <div class="spec-item"><span class="spec-label">RAM</span><span class="spec-value">16GB
+                                        DDR4</span></div>
+                                <div class="spec-item"><span class="spec-label">Storage</span><span
+                                        class="spec-value">250GB SSD + 1TB HDD</span></div>
                             </div>
                         </div>
                     </div>
-                    <div class="hobby-tags">
-                        <span>Coding</span><span>Banking Prep</span><span>Anime</span><span>Gaming</span>
+                    <div class="hobby-tags" style="overflow-x: auto; white-space: nowrap;">
+                        <span>Banking Aspirant</span><span>Developer</span><span>Digital Artist</span><span>Video
+                            Editor</span><span>Anime</span><span>Gaming</span><span>Stoic</span>
                     </div>
                 </div>
             </div>
@@ -201,12 +316,30 @@
                     <span class="quote-author">- Sasuke Uchiha</span>
                 </div>
                 <div class="contact-links">
-                    <a href="mailto:amankumar805554@gmail.com" class="contact-item"><div class="icon-box mail"><ion-icon name="mail"></ion-icon></div><div class="contact-text"><span>Gmail</span><small>Connect</small></div></a>
-                    <a href="https://t.me/inocent_aman" target="_blank" class="contact-item"><div class="icon-box telegram"><ion-icon name="paper-plane"></ion-icon></div><div class="contact-text"><span>Telegram</span><small>Chat</small></div></a>
-                    <a href="https://linkedin.com/in/inosent_aman" target="_blank" class="contact-item"><div class="icon-box linkedin"><ion-icon name="logo-linkedin"></ion-icon></div><div class="contact-text"><span>LinkedIn</span><small>Professional</small></div></a>
-                    <a href="https://instagram.com/inosent_aman" target="_blank" class="contact-item"><div class="icon-box instagram"><ion-icon name="logo-instagram"></ion-icon></div><div class="contact-text"><span>Instagram</span><small>Social</small></div></a>
-                    <a href="https://github.com/amankumar805554" target="_blank" class="contact-item"><div class="icon-box github"><ion-icon name="logo-github"></ion-icon></div><div class="contact-text"><span>GitHub</span><small>Code</small></div></a>
-                    <a href="https://discord.gg/inosent_aman" target="_blank" class="contact-item"><div class="icon-box discord"><ion-icon name="logo-discord"></ion-icon></div><div class="contact-text"><span>Discord</span><small>Community</small></div></a>
+                    <a href="mailto:amankumar805554@gmail.com" class="contact-item">
+                        <div class="icon-box mail"><ion-icon name="mail"></ion-icon></div>
+                        <div class="contact-text"><span>Gmail</span><small>Connect</small></div>
+                    </a>
+                    <a href="https://t.me/inocent_aman" target="_blank" class="contact-item">
+                        <div class="icon-box telegram"><ion-icon name="paper-plane"></ion-icon></div>
+                        <div class="contact-text"><span>Telegram</span><small>Chat</small></div>
+                    </a>
+                    <a href="https://linkedin.com/in/inosent_aman" target="_blank" class="contact-item">
+                        <div class="icon-box linkedin"><ion-icon name="logo-linkedin"></ion-icon></div>
+                        <div class="contact-text"><span>Linkedin</span><small>Professional</small></div>
+                    </a>
+                    <a href="https://instagram.com/inosent_aman" target="_blank" class="contact-item">
+                        <div class="icon-box instagram"><ion-icon name="logo-instagram"></ion-icon></div>
+                        <div class="contact-text"><span>Instagram</span><small>Social</small></div>
+                    </a>
+                    <a href="https://github.com/amankumar805554" target="_blank" class="contact-item">
+                        <div class="icon-box github"><ion-icon name="logo-github"></ion-icon></div>
+                        <div class="contact-text"><span>Github</span><small>Code</small></div>
+                    </a>
+                    <a href="https://discord.gg/inosent_aman" target="_blank" class="contact-item">
+                        <div class="icon-box discord"><ion-icon name="logo-discord"></ion-icon></div>
+                        <div class="contact-text"><span>Discord</span><small>Community</small></div>
+                    </a>
                 </div>
             </div>
         </div>
@@ -214,4 +347,5 @@
     </div>
     <script type="module" src="app.js?v=20"></script>
 </body>
+
 </html>

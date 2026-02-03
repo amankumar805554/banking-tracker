@@ -20,6 +20,34 @@ body {
 }
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
+/* --- ANIME FONT --- */
+
+body {
+    font-variant: small-caps;
+    letter-spacing: 0.5px;
+}
+
+input, button, select, textarea, .tab-btn {
+    font-variant: small-caps !important;
+    letter-spacing: 0.5px;
+}
+
+h1, h2, h3, h4, .brand-text, .mission-text, strong, b {
+    font-weight: 800;
+    letter-spacing: 1px;
+}
+
+.spec-value {
+    font-variant: normal !important;
+    letter-spacing: 0px;
+    font-family: 'Inter', sans-serif;
+}
+
+.bio-section p, .quote-box p {
+    font-style: italic;
+    opacity: 0.9;
+}
+
 #app-container { width: 100%; max-width: 600px; margin: 0 auto; padding: 15px; padding-bottom: 120px; }
 
 /* HEADER */
@@ -207,6 +235,154 @@ body.sharingan .main-profile-pic { box-shadow: 0 0 35px rgba(220, 38, 38, 0.6); 
 .btn-save-static { background: var(--primary); color: white; border: none; padding: 12px 28px; border-radius: 30px; font-weight: 800; cursor: pointer; }
 .mobile-spacer { height: 100px; }
 
+/* --- INTEL / NEWS CARD --- */
+.intel-card {
+    border-left: 4px solid var(--primary); /* Accent line */
+}
+.daily-term-box {
+    background: var(--bg-color);
+    padding: 15px;
+    border-radius: 12px;
+    border: 1px dashed var(--border);
+    margin-top: 10px;
+    position: relative;
+}
+.daily-term-box small {
+    font-size: 0.7rem;
+    font-weight: 800;
+    color: var(--primary);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+.daily-term-box h3 {
+    margin: 5px 0;
+    font-size: 1.2rem;
+    color: var(--text-main);
+}
+.daily-term-box p {
+    font-size: 0.9rem;
+    color: var(--text-sub);
+    line-height: 1.5;
+    margin: 0;
+    font-style: italic;
+}
+.intel-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 10px;
+}
+.intel-btn {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--bg-color);
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    text-decoration: none;
+    color: var(--text-main);
+    font-size: 0.8rem;
+    font-weight: 700;
+    transition: all 0.2s;
+}
+.intel-btn:hover {
+    border-color: var(--primary);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+body.sharingan .daily-term-box {
+    border-color: #7f1d1d;
+    background: #1a0505;
+}
+body.sharingan .intel-btn:hover {
+    background: #450a0a;
+    color: #ef4444;
+}
+
+/* --- TRAINING STYLES --- */
+
+/* 1. SPEED JUTSU (GAME) */
+.game-card { text-align: center; border: 2px solid var(--border); overflow: hidden; position: relative; padding-bottom: 0; }
+.game-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+.score-box { font-weight: 800; color: var(--primary); letter-spacing: 1px; font-size: 0.9rem; }
+
+/* Modern Input Styling */
+.game-arena h2 { font-size: 3rem; margin: 10px 0; font-family: 'Courier New', monospace; letter-spacing: -2px; font-weight: 800; }
+.input-wrapper { display: inline-block; position: relative; width: 100px; margin-bottom: 25px; }
+.game-arena input { 
+    width: 100%; font-size: 2.2rem; text-align: center; border: none; 
+    border-bottom: 3px solid var(--text-sub); 
+    background: transparent; color: var(--text-main); 
+    outline: none; padding-bottom: 5px; transition: all 0.3s;
+}
+.game-arena input:focus { border-color: var(--primary); box-shadow: 0 4px 15px -5px var(--primary); transform: scale(1.1); }
+/* Hide Number Spinners */
+input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+
+/* Timer Bar */
+.chakra-bar-container { width: 100%; height: 6px; background: var(--bg-color); margin-top: 10px; position: absolute; bottom: 0; left: 0; }
+.chakra-bar { height: 100%; width: 0%; background: #EF4444; transform-origin: left; transition: width 0.1s linear; }
+
+/* 2. FORBIDDEN SCROLL CARD */
+.scroll-card { cursor: pointer; transition: transform 0.2s; border: 1px dashed var(--border); }
+.scroll-card:active { transform: scale(0.98); }
+.scroll-content { display: flex; align-items: center; gap: 15px; }
+.scroll-icon-box { font-size: 2rem; }
+.scroll-text h4 { margin: 0; font-size: 1.1rem; }
+.scroll-text small { color: var(--text-sub); font-size: 0.8rem; }
+
+/* 3. MODAL (POPUP) STYLES */
+.modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); z-index: 2000; display: none; align-items: center; justify-content: center; padding: 20px; }
+.modal-content { background: var(--card-bg); width: 100%; max-width: 500px; max-height: 80vh; border-radius: 20px; border: 1px solid var(--border); display: flex; flex-direction: column; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+.modal-header { padding: 15px 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+.close-modal-btn { background: transparent; border: none; font-size: 1.5rem; color: var(--text-main); cursor: pointer; }
+.modal-body { padding: 0; overflow-y: auto; flex: 1; }
+.modal-body::-webkit-scrollbar { width: 6px; }
+.modal-body::-webkit-scrollbar-track { background: transparent; }
+.modal-body::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.2); border-radius: 10px; }
+body.dark .modal-body::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); }
+body.sharingan .modal-body::-webkit-scrollbar-thumb { background: var(--primary); }
+
+.tabs-scroll { display: flex; border-bottom: 1px solid var(--border); }
+.scroll-tab { flex: 1; padding: 12px; background: transparent; border: none; color: var(--text-sub); font-weight: 700; cursor: pointer; border-bottom: 2px solid transparent; }
+.scroll-tab.active { color: var(--primary); border-bottom-color: var(--primary); background: rgba(0,0,0,0.02); }
+
+.data-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); padding: 1px; }
+.data-item { background: var(--card-bg); padding: 12px 5px; text-align: center; font-size: 0.9rem; font-weight: 600; color: var(--text-main); }
+.data-item span { display: block; font-size: 0.7rem; color: var(--text-sub); margin-top: 2px; }
+
+.game-controls {
+    margin: 20px 0; /* Adds space above and below */
+    z-index: 10;
+    position: relative;
+}
+.game-controls .btn-primary {
+    padding: 15px 40px; /* Bigger touch area */
+    font-size: 1.1rem;
+    letter-spacing: 1px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+#mute-btn {
+    font-size: 1.8rem; /* Bigger icon */
+    padding: 10px;
+    color: var(--text-sub);
+    transition: color 0.2s;
+}
+#mute-btn:active { transform: scale(0.9); }
+
+/* 4. MOCK INPUTS (MODERN) */
+.add-mock-area { display: flex; gap: 10px; align-items: flex-end; }
+.add-mock-area input { 
+    background: transparent; border: none; border-bottom: 2px solid var(--border); 
+    padding: 8px 0; color: var(--text-main); font-weight: 600; border-radius: 0;
+}
+.add-mock-area input:focus { border-color: var(--primary); }
+
+/* Animation Classes */
+.correct-hit { border-color: #10B981 !important; box-shadow: 0 0 20px rgba(16, 185, 129, 0.2); }
+.wrong-hit { border-color: #EF4444 !important; box-shadow: 0 0 20px rgba(239, 68, 68, 0.2); }
+
 /* FAB */
 .fab-btn { position: fixed; bottom: calc(100px + env(safe-area-inset-bottom)); right: 25px; width: 56px; height: 56px; background: var(--primary); color: white; border: none; border-radius: 50%; font-size: 1.8rem; cursor: pointer; box-shadow: 0 4px 15px rgba(79, 70, 229, 0.4); display: flex; align-items: center; justify-content: center; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); z-index: 999; }
 .fab-btn:hover { transform: scale(1.1) rotate(90deg); box-shadow: 0 6px 20px rgba(79, 70, 229, 0.6); }
@@ -248,7 +424,7 @@ body.sharingan .fab-btn:hover { box-shadow: 0 6px 20px rgba(220, 38, 38, 0.7); }
     #app-container { max-width: 1200px; padding: 30px; padding-bottom: 50px; }
     .desktop-layout-wrapper { display: grid; grid-template-columns: 350px 1fr; gap: 30px; align-items: start; }
     .contact-links { grid-template-columns: 1fr 1fr; }
-    .chart-card-sticky { position: sticky; top: 20px; }
+    .chart-card-sticky { position: relative; top: 0; }
     .floating-bar, .mobile-spacer { display: none !important; }
     .static-save-panel { display: flex !important; }
     .right-column { position: relative; }
